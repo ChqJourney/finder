@@ -8,7 +8,6 @@
     import { load, Store } from "@tauri-apps/plugin-store";
     import { open } from "@tauri-apps/plugin-shell";
     import { register, unregister, unregisterAll,isRegistered } from "@tauri-apps/plugin-global-shortcut";
-    import { clear, readText } from '@tauri-apps/plugin-clipboard-manager';
 
 let isAlwaysOnTop=$state<boolean>(false);
 let searchScenarios=$state<SearchScenarios[]>([]);
@@ -54,6 +53,11 @@ async function search() {
     
     // Combine sorted used results with unused results
     searchResults = [...sortedUsedResults, ...unusedResults];
+    // focus on result container, and the first result selected
+    setTimeout(() => {
+      resultsContainer?.focus();
+      scrollToSelected();
+    }, 0);
   } catch (error) {
     console.error("Search error:", error);
     searchResults = [];
@@ -138,22 +142,7 @@ const init = async () => {
     searchScenarios = [...event.payload.scenarios];
   });
   
-  // 监听窗口焦点
-  const window = await getCurrentWindow();
-  unlistenFocus = await window.onFocusChanged(async({ payload: focused }) => {
-    if (focused && search_input) {
-      search_input.focus();
-      const txt=await readText();
-      if (txt&&txt!=="") {
-        searchTerm=txt;
-        try {
-          await clear();
-        } catch (error) {
-          console.error("Error clearing clipboard:", error);
-        }
-      }
-    }
-  });
+ 
 
   //加载已有的搜索场景
   store=await Store.load('finder-settings.json');
@@ -233,7 +222,7 @@ const scrollToSelected = () => {
 };
 </script>
 <div data-tauri-drag-region class="titlebar">
-  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working', { title: 'have fun', kind: 'info' })} aria-label="brand">
+  <button class="titlebar-button" onclick={async()=>await message('Finder v1.0.1\nCreated by Patrick,just for easy working', { title: 'Have fun', kind: 'info' })} aria-label="brand">
 
     <img class="brand" width="20px" height="20px" src="/brand.png" alt="brand"/>
   </button>
@@ -273,7 +262,9 @@ const scrollToSelected = () => {
         onkeydown={handleKeyDown}
       />
       {#if searchTerm}
-        <button class="clear-button" onclick={clearSearch}>×</button>
+        <button class="clear-button" aria-label="clear" onclick={clearSearch}>
+          <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200"><path d="M822.00345 776.822434l0.022513-0.022513L246.50423 201.317075c-5.78782-5.791913-13.785981-9.374508-22.621207-9.374508-17.662265 0-31.980365 14.3181-31.980365 31.980365 0 8.834202 3.582595 16.832364 9.373485 22.620184L776.11226 821.339324c5.838985 6.277984 14.166651 10.209526 23.416316 10.209526 17.662265 0 31.980365-14.3181 31.980365-31.980365C831.508941 790.667767 827.871087 782.620487 822.00345 776.822434z" p-id="1472"></path><path d="M776.783549 201.448058l-0.022513-0.022513L201.278189 776.947278c-5.791913 5.78782-9.374508 13.785981-9.374508 22.621207 0 17.662265 14.3181 31.980365 31.980365 31.980365 8.834202 0 16.832364-3.582595 22.620184-9.373485l574.797231-574.836117c6.277984-5.838985 10.209526-14.166651 10.209526-23.416316 0-17.662265-14.3181-31.980365-31.980365-31.980365C790.628882 191.942567 782.580578 195.58042 776.783549 201.448058z"></path></svg>
+        </button>
       {/if}
       <button 
         class="search-btn" 

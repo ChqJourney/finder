@@ -27,9 +27,6 @@
     "global-shortcut:allow-unregister-all",
     "shell:default",
     "shell:allow-open",
-    "clipboard-manager:default",
-    "clipboard-manager:allow-read-text",
-    "clipboard-manager:allow-clear",
     "dialog:default",
     "dialog:allow-message"
   ]
