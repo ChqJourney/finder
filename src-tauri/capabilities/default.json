@@ -17,6 +17,7 @@
     "core:window:allow-show",
     "core:window:allow-set-always-on-top",
     "core:window:allow-set-focus",
+    "core:window:allow-minimize",
     "store:default",
     "store:allow-load",
     "store:allow-save",

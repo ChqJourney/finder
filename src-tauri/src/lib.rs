@@ -248,8 +248,26 @@ pub fn run() {
                         // println!("left click pressed and released");
                         let app = tray.app_handle();
                         if let Some(window) = app.get_webview_window("main") {
+                            println!("showing main window");
                             let _ = window.show();
                             let _ = window.set_focus();
+                        }else{
+                            println!("creating main window");
+                            let window = WebviewWindowBuilder::new(
+                                app,
+                                "main",
+                                WebviewUrl::App("index.html".into()),
+                            )
+                            .title("Finder")
+                            .center()
+                            .inner_size(400.0, 400.0)
+                            .decorations(false)
+                            .always_on_top(false)
+                            .resizable(false)
+                            .build()
+                            .unwrap();
+                            window.show().unwrap();
+                            window.set_focus().unwrap();
                         }
                     }
                     _ => {

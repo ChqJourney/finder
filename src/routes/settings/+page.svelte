@@ -306,6 +306,7 @@
                 >
                     {isCapturingShortcut ? 'Cancel' : 'Set Shortcut'}
                 </button>
+                <div class="shortcut-hint">p.s. 重启后生效</div>
             </div>
         </div>
         {:else}
@@ -316,6 +317,10 @@
     
 </div>
 <style>
+    .shortcut-hint{
+        color: red;
+        font-size: 14px;
+    }
    :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -397,6 +402,7 @@
         font-size: 1rem;
         transition: all 0.2s;
         border-radius: 4px;
+        user-select: none;
     }
 
     .tab-btn:hover {

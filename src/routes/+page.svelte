@@ -166,7 +166,9 @@ globalShortcutData = await store.get<string>("globalShortcut");
       if (!isAlreadyRegistered) {
         await register(globalShortcutData, async() => {
           const window = getCurrentWindow();
-          window.setFocus();
+          window?.show();
+          window?.setFocus();
+          search_input?.focus();
         });
       }
     }
@@ -222,7 +224,7 @@ const scrollToSelected = () => {
 };
 </script>
 <div data-tauri-drag-region class="titlebar">
-  <button class="titlebar-button" onclick={async()=>await message('Finder v1.0.1\nCreated by Patrick,just for easy working', { title: 'Have fun', kind: 'info' })} aria-label="brand">
+  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working, have fun', { title: 'Finder V0.1.2', kind: 'info' })} aria-label="brand">
 
     <img class="brand" width="20px" height="20px" src="/brand.png" alt="brand"/>
   </button>
@@ -242,8 +244,8 @@ const scrollToSelected = () => {
         ></path></svg
         >
       </button>
-      <button onclick={closeWindow} class="titlebar-button" id="titlebar-close">
-        <img src="https://api.iconify.design/mdi:close.svg" alt="close" />
+      <button aria-label="close" onclick={closeWindow} class="titlebar-button" id="titlebar-close">
+        <svg class="top-icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" width="200" height="200"><path d="M568 515.008l254.016-255.008q12-11.008 12-27.488t-11.488-28-28-11.488-27.488 12l-255.008 254.016-255.008-254.016q-11.008-12-27.488-12t-28 11.488-11.488 28 12 27.488l254.016 255.008-254.016 255.008q-12 11.008-12 27.488t11.488 28 28 11.488 27.488-12l255.008-255.008 255.008 255.008q11.008 12 27.488 12t28-11.488 11.488-28-12-27.488z"></path></svg>
       </button>
     </div>
 </div>
@@ -392,6 +394,7 @@ const scrollToSelected = () => {
   user-select: none;
   -webkit-user-select: none;
   border:none;
+  background-color: transparent;
 }
 .titlebar-button:hover {
   scale: 1.1;
