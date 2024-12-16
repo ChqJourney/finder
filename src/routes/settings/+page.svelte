@@ -306,7 +306,7 @@
                 >
                     {isCapturingShortcut ? 'Cancel' : 'Set Shortcut'}
                 </button>
-                <div class="shortcut-hint">p.s. 重启后生效</div>
+                <div class="shortcut-hint">p.s. take effect after restart this app</div>
             </div>
         </div>
         {:else}

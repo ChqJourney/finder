@@ -53,11 +53,6 @@ async function search() {
     
     // Combine sorted used results with unused results
     searchResults = [...sortedUsedResults, ...unusedResults];
-    // focus on result container, and the first result selected
-    setTimeout(() => {
-      resultsContainer?.focus();
-      scrollToSelected();
-    }, 0);
   } catch (error) {
     console.error("Search error:", error);
     searchResults = [];
@@ -189,7 +184,7 @@ $effect(() => {
     setTimeout(() => {
       resultsContainer?.focus();
       scrollToSelected();
-    }, 0);
+    }, 100); // 增加延时确保DOM渲染完成
   }
 });
 
@@ -224,7 +219,7 @@ const scrollToSelected = () => {
 };
 </script>
 <div data-tauri-drag-region class="titlebar">
-  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working, have fun', { title: 'Finder V0.1.2', kind: 'info' })} aria-label="brand">
+  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working, have fun', { title: 'Finder V0.1.3', kind: 'info' })} aria-label="brand">
 
     <img class="brand" width="20px" height="20px" src="/brand.png" alt="brand"/>
   </button>
@@ -260,7 +255,7 @@ const scrollToSelected = () => {
         type="text"
         class="search-input"
         bind:value={searchTerm}
-        placeholder="搜索..."
+        placeholder="type here..."
         onkeydown={handleKeyDown}
       />
       {#if searchTerm}
@@ -314,7 +309,7 @@ const scrollToSelected = () => {
   <div 
     class="results-container" 
     bind:this={resultsContainer}
-   
+    tabindex="-1"
     onkeydown={handleKeydown}
   >
     {#if searchResults.length > 0}
@@ -435,7 +430,7 @@ const scrollToSelected = () => {
   border-radius: 4px;
   padding: 8px;
   width: 100%;
-  font-size: 16px;
+  font-size: 14px;
   box-sizing: border-box;
   outline: none;
   color:#666;
