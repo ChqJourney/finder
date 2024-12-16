@@ -318,7 +318,7 @@
 </div>
 <style>
     .shortcut-hint{
-        color: red;
+        color: rgb(200, 117, 203);
         font-size: 14px;
     }
    :root {

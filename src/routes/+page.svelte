@@ -8,6 +8,7 @@
     import { load, Store } from "@tauri-apps/plugin-store";
     import { open } from "@tauri-apps/plugin-shell";
     import { register, unregister, unregisterAll,isRegistered } from "@tauri-apps/plugin-global-shortcut";
+    import { preventDefault } from "svelte/legacy";
 
 let isAlwaysOnTop=$state<boolean>(false);
 let searchScenarios=$state<SearchScenarios[]>([]);
@@ -87,6 +88,16 @@ async function openFile(path: string) {
     await store.set('usedPath', usedPath);
   } catch (error) {
     console.error("Error opening file:", error);
+  }
+}
+async function openFolder(path: string) {
+  try {
+    // convert file path to folder path
+    const folderPath = path.substring(0, path.lastIndexOf('\\'));
+    console.log(folderPath);
+    await open(folderPath);
+  } catch (error) {
+    console.error("Error opening folder:", error);
   }
 }
 
@@ -205,7 +216,11 @@ const handleKeydown =async (event: KeyboardEvent) => {
     case 'Enter':
       event.preventDefault();
       if (selectedIndex >= 0 && selectedIndex < searchResults.length) {
-        await openFile(searchResults[selectedIndex].path);
+        if (event.ctrlKey) {
+          await openFolder(searchResults[selectedIndex].path);
+        } else {
+          await openFile(searchResults[selectedIndex].path);
+        }
       }
       break;
   }
@@ -312,9 +327,10 @@ const scrollToSelected = () => {
     tabindex="-1"
     onkeydown={handleKeydown}
   >
+  
     {#if searchResults.length > 0}
     {#each searchResults as result, i}
-      <button title={result.path}
+      <div aria-label="result-item" title={result.path}
         class="result-item" 
         class:selected={i === selectedIndex}
         onclick={() => {
@@ -325,20 +341,28 @@ const scrollToSelected = () => {
           await openFile(result.path);
         }}
       >
-      <div class="file-icon">
-        {@html getFileIcon(result)}
-      </div>
+
+        <div class="file-icon">
+          {@html getFileIcon(result)}
+        </div>
         <div class="file-name">
           {result.name}
         </div>
-      </button>
+    
+    </div>
     {/each}
   {:else if isSearching}
     <div class="searching">
-      <button class="cancel-btn" title="Cancel search" onclick={async()=>await cancelSearch()}>
+      <button class="cancel-btn" title="Cancel search" onclick={async(e)=>{await cancelSearch();e.stopPropagation()}}>
         Cancel
         <div class="spinner"></div>
       </button>
+      </div>
+      {:else}
+      <div class="hints">
+
+        <div>Press <strong>Enter</strong> to open result item</div>
+        <div>Press <strong>Ctrl + Enter</strong> to open the folder of result item located in </div>
       </div>
   {/if}
   </div>
@@ -347,7 +371,6 @@ const scrollToSelected = () => {
 </main>
 
 <style>
-
 
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
@@ -481,11 +504,11 @@ const scrollToSelected = () => {
   background: transparent;
   cursor: pointer;
   padding: 5px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 30px;
-    height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
 }
 .clear-button:hover {
   color: #5bbec3;
@@ -577,18 +600,19 @@ const scrollToSelected = () => {
 .result-item {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 8px;
+  padding: 8px 24px 8px 8px;
   text-align: left;
-  cursor: pointer;
   transition: background-color 0.3s ease;  
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  position: relative;
 }
 .result-item:hover {
   background-color: #5bbec3;
   color: #fff;
 }
+
 .file-name {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -630,5 +654,18 @@ const scrollToSelected = () => {
   color: white;
   background: #c2c5c5;
   scale: 1.1;
+}
+.hints{
+  position: absolute;
+  width: 80%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-direction: column;
+  color:rgb(158, 154, 154)
 }
 </style>
