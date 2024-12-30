@@ -234,7 +234,7 @@ const scrollToSelected = () => {
 };
 </script>
 <div data-tauri-drag-region class="titlebar">
-  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working, have fun', { title: 'Finder V0.1.3', kind: 'info' })} aria-label="brand">
+  <button class="titlebar-button" onclick={async()=>await message('Created by Patrick,just for easy working, have fun', { title: 'Finder V0.1.4', kind: 'info' })} aria-label="brand">
 
     <img class="brand" width="20px" height="20px" src="/brand.png" alt="brand"/>
   </button>
