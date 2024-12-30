@@ -2,7 +2,7 @@
 
 A powerful and fast file search application built with Tauri, SvelteKit, and TypeScript. This desktop application allows you to quickly search through your files with advanced features and customizable search scenarios.
 
-download link: [https://github.com/tauri-apps/finder/releases/latest](https://github.com/tauri-apps/finder/releases/latest)
+download portable version or installer version in this link: [https://github.com/tauri-apps/finder/releases/latest](https://github.com/tauri-apps/finder/releases/latest) 
 
 ## Features
 
