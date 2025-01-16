@@ -238,6 +238,7 @@ const scrollToSelected = () => {
 
     <img class="brand" width="20px" height="20px" src="/brand.png" alt="brand"/>
   </button>
+  <div class="hints" style="width: auto;">{currentSearchState?.name??"..."}</div>
   <div class="left-top">
 
     <button onclick={toggleAlwaysOnTop} aria-label="alwaysontop" class="titlebar-button" id="titlebar-ontop">
